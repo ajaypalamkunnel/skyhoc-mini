@@ -7,7 +7,13 @@ import { hashPassword, verifyPassword } from "../../../utils/password";
 import { LoginInput, SignupInput } from "../dto/auth.dto";
 import { IAuthRepository } from "../repository/auth.repository.interface";
 import { AuthTokens, IAuthService } from "./auth.service.interface";
-import { generateAccessToken, generateRefreshToken } from "../../../utils/jwt";
+import {
+  generateAccessToken,
+  generateRefreshToken,
+  getRefreshTokenExpiresAt,
+  verifyRefreshToken,
+  RefreshTokenPayload,
+} from "../../../utils/jwt";
 import { CurrentUserResponseDTO } from "../dto/auth.response.dto";
 
 export class AuthService implements IAuthService {
@@ -85,15 +91,16 @@ export class AuthService implements IAuthService {
       );
     }
 
-    // 1. Create a temporary value for the session.
+    // 1. Generate a temporary random value and hash it with Argon2.
     // The real refresh-token hash will replace this immediately.
-    const temporaryTokenHash = randomBytes(32).toString("hex");
+    const temporaryRandomValue = randomBytes(32).toString("hex");
+    const temporaryTokenHash = await hashPassword(temporaryRandomValue);
 
     // 2. Create the database session.
     const session = await this.authRepository.createSession({
       userId: user.id,
       refreshTokenHash: temporaryTokenHash,
-      expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+      expiresAt: getRefreshTokenExpiresAt(),
       userAgent,
       ipAddress,
     });
@@ -156,4 +163,117 @@ export class AuthService implements IAuthService {
   };
 }
 
+  async refresh(refreshToken: string): Promise<AuthTokens> {
+    let payload: RefreshTokenPayload;
+
+    try {
+      payload = verifyRefreshToken(refreshToken);
+    } catch {
+      throw new AppError(
+        "Invalid or expired refresh token",
+        HTTP_STATUS.UNAUTHORIZED,
+        ERROR_CODES.INVALID_TOKEN,
+      );
+    }
+
+    const session = await this.authRepository.findSessionById(payload.sessionId);
+
+    if (!session || session.userId !== payload.userId) {
+      throw new AppError(
+        "Session not found",
+        HTTP_STATUS.UNAUTHORIZED,
+        ERROR_CODES.SESSION_NOT_FOUND,
+      );
+    }
+
+    if (session.revokedAt) {
+      throw new AppError(
+        "Session has been revoked",
+        HTTP_STATUS.UNAUTHORIZED,
+        ERROR_CODES.SESSION_REVOKED,
+      );
+    }
+
+    if (session.expiresAt.getTime() <= Date.now()) {
+      throw new AppError(
+        "Session has expired",
+        HTTP_STATUS.UNAUTHORIZED,
+        ERROR_CODES.TOKEN_EXPIRED,
+      );
+    }
+
+    const isTokenValid = await verifyPassword(
+      refreshToken,
+      session.refreshTokenHash,
+    );
+
+    if (!isTokenValid) {
+      throw new AppError(
+        "Invalid refresh token",
+        HTTP_STATUS.UNAUTHORIZED,
+        ERROR_CODES.INVALID_TOKEN,
+      );
+    }
+
+    const user = await this.authRepository.findUserById(session.userId);
+
+    if (!user) {
+      throw new AppError(
+        "User not found",
+        HTTP_STATUS.NOT_FOUND,
+        ERROR_CODES.USER_NOT_FOUND,
+      );
+    }
+
+    if (!user.isActive || user.role.status !== RoleStatus.ACTIVE) {
+      throw new AppError(
+        "Account is inactive",
+        HTTP_STATUS.FORBIDDEN,
+        ERROR_CODES.FORBIDDEN,
+      );
+    }
+
+    const newRefreshToken = generateRefreshToken({
+      userId: user.id,
+      sessionId: session.id,
+    });
+
+    const newRefreshTokenHash = await hashPassword(newRefreshToken);
+
+    await this.authRepository.updateSession(session.id, {
+      refreshTokenHash: newRefreshTokenHash,
+      lastUsedAt: new Date(),
+      expiresAt: getRefreshTokenExpiresAt(),
+    });
+
+    const accessToken = generateAccessToken({
+      userId: user.id,
+      role: user.role.type,
+    });
+
+    return {
+      accessToken,
+      refreshToken: newRefreshToken,
+    };
+  }
+
+  async logout(userId: number, refreshToken?: string): Promise<void> {
+    if (!refreshToken) {
+      return;
+    }
+
+    try {
+      const payload = verifyRefreshToken(refreshToken);
+
+      if (payload && payload.sessionId) {
+        const session = await this.authRepository.findSessionById(payload.sessionId);
+
+        if (session && session.userId === userId && !session.revokedAt) {
+          await this.authRepository.revokeSession(session.id);
+        }
+      }
+    } catch {
+      // If token expired or invalid, session cannot be refreshed anyway
+    }
+  }
 }

@@ -9,8 +9,6 @@ export const errorMiddleware = (
   res: Response,
   _next: NextFunction,
 ): void => {
-  console.error(error);
-
   if (error instanceof ZodError) {
     res.status(400).json({
       success: false,
@@ -26,6 +24,10 @@ export const errorMiddleware = (
   }
 
   if (error instanceof AppError) {
+    if (error.statusCode >= 500) {
+      console.error(error);
+    }
+
     res.status(error.statusCode).json({
       success: false,
       code: error.code,
@@ -34,6 +36,8 @@ export const errorMiddleware = (
 
     return;
   }
+
+  console.error("Unhandled Exception:", error);
 
   res.status(500).json({
     success: false,

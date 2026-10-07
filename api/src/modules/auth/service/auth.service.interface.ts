@@ -16,6 +16,10 @@ export interface IAuthService {
   ): Promise<AuthTokens>;
 
   getCurrentUser(
-  userId: number,
-): Promise<CurrentUserResponseDTO>;
+    userId: number,
+  ): Promise<CurrentUserResponseDTO>;
+
+  refresh(refreshToken: string): Promise<AuthTokens>;
+
+  logout(userId: number, refreshToken?: string): Promise<void>;
 }

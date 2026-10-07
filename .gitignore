@@ -40,6 +40,7 @@ Thumbs.db
 **/.claude/
 **/.windsurf/
 api/skills-lock.json
+api/Agent.md
 
 # Prisma generated client
 api/src/generated/prisma/
