@@ -5,7 +5,7 @@ import { HTTP_STATUS } from "../../../utils/http-status";
 import { ERROR_CODES } from "../../../utils/error-codes";
 import { AppError } from "../../../utils/app-error";
 import { sendSuccess } from "../../../utils/api-response";
-import { setAuthCookies } from "../../../utils/cookies";
+import { clearAuthCookies, setAuthCookies } from "../../../utils/cookies";
 
 export class AuthController {
   constructor(private readonly authService: IAuthService) {}
@@ -24,7 +24,7 @@ export class AuthController {
 
   login = async (req: Request, res: Response): Promise<void> => {
     const input = loginSchema.parse(req.body);
-    const userAgent = req.headers["user-agent"];
+    const userAgent = req.get("user-agent");
     const ipAddress = req.ip;
 
     const { accessToken, refreshToken } = await this.authService.login(
@@ -58,6 +58,51 @@ export class AuthController {
       HTTP_STATUS.OK,
       "Current user fetched successfully",
       user,
+    );
+  };
+
+  refresh = async (req: Request, res: Response): Promise<void> => {
+    const refreshToken = req.cookies?.refresh_token;
+
+    if (!refreshToken) {
+      throw new AppError(
+        "Refresh token is required",
+        HTTP_STATUS.UNAUTHORIZED,
+        ERROR_CODES.UNAUTHORIZED,
+      );
+    }
+
+    const { accessToken, refreshToken: newRefreshToken } =
+      await this.authService.refresh(refreshToken);
+
+    setAuthCookies(res, accessToken, newRefreshToken);
+
+    sendSuccess(
+      res,
+      HTTP_STATUS.OK,
+      "Token refreshed successfully",
+    );
+  };
+
+  logout = async (req: Request, res: Response): Promise<void> => {
+    if (!req.auth?.userId) {
+      throw new AppError(
+        "Authentication required",
+        HTTP_STATUS.UNAUTHORIZED,
+        ERROR_CODES.UNAUTHORIZED,
+      );
+    }
+
+    const refreshToken = req.cookies?.refresh_token;
+
+    await this.authService.logout(req.auth.userId, refreshToken);
+
+    clearAuthCookies(res);
+
+    sendSuccess(
+      res,
+      HTTP_STATUS.OK,
+      "Logged out successfully",
     );
   };
 }
