@@ -1,7 +1,18 @@
 import app from "./app";
+import { connectDatabase } from "./config/database";
+import { env } from "./config/env";
 
-const PORT = process.env.PORT || 5000;
+const startServer = async (): Promise<void> => {
+  try {
+    await connectDatabase();
 
-app.listen(PORT, () => {
-  console.log(`Skyhoc API running on port ${PORT}`);
-});
+    app.listen(env.port, () => {
+      console.log(`✓ API server running on port ${env.port}`);
+    });
+  } catch (error) {
+    console.error("✗ Database connection failed:", error);
+    process.exit(1);
+  }
+};
+
+startServer();
