@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 import { useAuthStore } from "@/features/auth/auth.store";
+import { getRoleHomeRoute } from "@/features/auth/auth.roles";
 
 export function LoginForm() {
   const router = useRouter();
@@ -39,12 +40,13 @@ export function LoginForm() {
     }
 
     try {
-      await login({
+      const user = await login({
         email: trimmedEmail,
         password,
       });
 
-      router.push("/dashboard");
+      const targetRoute = getRoleHomeRoute(user?.role);
+      router.push(targetRoute);
     } catch {
       // Store already sets user-friendly error message in state
     }
