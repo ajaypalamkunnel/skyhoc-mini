@@ -8,8 +8,10 @@ model User {
   createdAt    DateTime @default(now()) @map("created_at")
   updatedAt    DateTime @updatedAt @map("updated_at")
 
-  role Role @relation(fields: [roleId], references: [id])
-  sessions Session[]
+  role             Role         @relation(fields: [roleId], references: [id])
+  sessions         Session[]
+  enrollments      Enrollment[]
+  tutorLiveClasses LiveClass[]  @relation("TutorLiveClasses")
 
   @@map("users")
 }

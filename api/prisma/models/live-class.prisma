@@ -1,0 +1,25 @@
+enum LiveClassStatus {
+  SCHEDULED
+  CANCELLED
+  COMPLETED
+}
+
+model LiveClass {
+  id        Int             @id @default(autoincrement())
+  courseId  Int             @map("course_id")
+  tutorId   Int             @map("tutor_id")
+  title     String
+  startsAt  DateTime        @map("starts_at")
+  durationMinutes Int             @map("duration_minutes")
+  status    LiveClassStatus @default(SCHEDULED)
+  createdAt DateTime        @default(now()) @map("created_at")
+  updatedAt DateTime?       @map("updated_at")
+
+  course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  tutor  User   @relation("TutorLiveClasses", fields: [tutorId], references: [id])
+
+  @@index([courseId])
+  @@index([tutorId])
+  @@index([courseId, startsAt])
+  @@map("live_classes")
+}
