@@ -14,7 +14,7 @@ interface AuthState {
     error: string | null;
 
     signup: (input: SignupInput) => Promise<void>;
-    login: (input: LoginInput) => Promise<void>;
+    login: (input: LoginInput) => Promise<CurrentUser>;
     getCurrentUser: () => Promise<void>;
     logout: () => Promise<void>;
     refresh: () => Promise<void>;
@@ -73,6 +73,8 @@ export const useAuthStore = create<AuthState>((set) => ({
                 isLoading: false,
                 isAuthenticated: true,
             });
+
+            return response.data;
         } catch (error) {
             set({
                 user: null,

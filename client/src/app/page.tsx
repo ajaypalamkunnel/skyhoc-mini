@@ -11,7 +11,7 @@ export default function Home() {
               <span className="text-white font-bold text-lg tracking-wider">S</span>
             </div>
             <span className="text-lg font-bold tracking-tight text-white">
-              Skyhoc<span className="text-indigo-400">.</span>
+              Skyhoch<span className="text-indigo-400">.</span>
             </span>
           </div>
 
@@ -123,7 +123,7 @@ export default function Home() {
 
       {/* Minimal Footer */}
       <footer className="border-t border-neutral-800/60 py-8 text-center text-xs text-neutral-500">
-        <p>&copy; {new Date().getFullYear()} Skyhoc Inc. All rights reserved.</p>
+        <p>&copy; {new Date().getFullYear()} Skyhoch Inc. All rights reserved.</p>
       </footer>
     </div>
   );

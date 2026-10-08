@@ -3,8 +3,8 @@ import type { Metadata } from "next";
 import { LoginForm } from "@/features/auth/components/login-form";
 
 export const metadata: Metadata = {
-  title: "Sign In | Skyhoc",
-  description: "Sign in to your Skyhoc account to access your courses and dashboard.",
+  title: "Sign In | Skyhoch",
+  description: "Sign in to your Skyhoch account to access your courses and dashboard.",
 };
 
 export default function LoginPage() {

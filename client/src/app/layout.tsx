@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Skyhoc — Student Learning Platform",
+  title: "Skyhoch — Student Learning Platform",
   description:
     "Next-generation learning management platform for enrolled courses, live interactive classes, and attendance tracking.",
 };

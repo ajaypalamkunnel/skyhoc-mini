@@ -27,17 +27,16 @@ router.get(
 );
 
 router.get(
-  "/:courseId/live-classes",
-  authenticate,
-  authorize(RoleType.STUDENT),
-  liveClassController.getCourseLiveClasses,
-);
-
-router.get(
   "/:courseId",
   authenticate,
   authorize(RoleType.STUDENT),
   courseController.getCourseById,
 );
 
+router.get(
+  "/:courseId/live-classes",
+  authenticate,
+  authorize(RoleType.STUDENT),
+  liveClassController.getCourseLiveClasses,
+);
 export default router;
