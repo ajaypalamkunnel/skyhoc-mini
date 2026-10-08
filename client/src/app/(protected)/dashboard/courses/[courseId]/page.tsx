@@ -21,7 +21,7 @@ export async function generateMetadata(
 ): Promise<Metadata> {
   const { courseId } = await props.params;
   return {
-    title: `Course Details | Skyhoc`,
+    title: `Course Details | Skyhoch`,
     description: `View live classes and details for course #${courseId}.`,
   };
 }

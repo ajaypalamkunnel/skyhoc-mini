@@ -3,7 +3,7 @@ import { requireRole } from "@/lib/auth/role-guard";
 import { RolePlaceholderDashboard } from "@/features/dashboard/components/role-placeholder-dashboard";
 
 export const metadata: Metadata = {
-  title: "Super Admin Dashboard | Skyhoc",
+  title: "Super Admin Dashboard | Skyhoch",
   description: "Platform settings, user access control, and system administration.",
 };
 

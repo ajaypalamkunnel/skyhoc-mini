@@ -3,7 +3,7 @@ import { requireRole } from "@/lib/auth/role-guard";
 import { RolePlaceholderDashboard } from "@/features/dashboard/components/role-placeholder-dashboard";
 
 export const metadata: Metadata = {
-  title: "Tutor Dashboard | Skyhoc",
+  title: "Tutor Dashboard | Skyhoch",
   description: "Manage your live tutoring sessions, student cohorts, and course schedules.",
 };
 

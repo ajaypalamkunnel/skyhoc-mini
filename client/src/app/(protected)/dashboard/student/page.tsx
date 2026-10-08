@@ -9,7 +9,7 @@ import type { LiveClass } from "@/features/live-classes/live-classes.types";
 import { DashboardView } from "@/features/dashboard/components/dashboard-view";
 
 export const metadata: Metadata = {
-  title: "Student Dashboard | Skyhoc",
+  title: "Student Dashboard | Skyhoch",
   description: "View your enrolled German language courses and live classes.",
 };
 

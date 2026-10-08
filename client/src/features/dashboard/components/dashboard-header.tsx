@@ -72,7 +72,7 @@ export function DashboardHeader({
               <span className="text-white font-bold text-sm">S</span>
             </div>
             <span className="text-lg font-bold tracking-tight text-neutral-900 dark:text-white">
-              Skyhoc<span className="text-indigo-600 dark:text-indigo-400">.</span>
+              Skyhoch<span className="text-indigo-600 dark:text-indigo-400">.</span>
             </span>
           </Link>
         </div>

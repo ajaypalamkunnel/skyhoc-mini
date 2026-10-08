@@ -3,8 +3,8 @@ import type { Metadata } from "next";
 import { SignupForm } from "@/features/auth/components/signup-form";
 
 export const metadata: Metadata = {
-  title: "Create Account | Skyhoc",
-  description: "Create your Skyhoc account to enroll in courses and attend live classes.",
+  title: "Create Account | Skyhoch",
+  description: "Create your Skyhoch account to enroll in courses and attend live classes.",
 };
 
 export default function SignupPage() {

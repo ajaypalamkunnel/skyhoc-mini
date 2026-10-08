@@ -201,7 +201,7 @@ export function DashboardView({
                   Student Overview
                 </h1>
                 <p className="text-xs sm:text-sm text-neutral-500 dark:text-neutral-400 mt-0.5">
-                  Summary of your Skyhoc learning journey and profile credentials.
+                  Summary of your Skyhoch learning journey and profile credentials.
                 </p>
               </div>
 

@@ -155,7 +155,7 @@ export function DashboardSidebar({
             </div>
 
             <div className="p-3 text-center text-xs text-neutral-400 dark:text-neutral-500 border-t border-neutral-200 dark:border-neutral-800">
-              Skyhoc Platform • v1.0
+              Skyhoch Platform • v1.0
             </div>
           </div>
         </div>
