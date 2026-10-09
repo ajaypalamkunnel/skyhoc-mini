@@ -18,19 +18,33 @@ export default async function SuperAdminDashboardPage() {
       description="Full administrative access to manage platform users, role assignments, system logs, and global configuration."
       featureList={[
         {
+          title: "Course Management",
+          description: "Audit, search, and inspect all active and archived language courses across the platform.",
+          icon: "📚",
+          href: "/dashboard/admin/courses",
+          statusLabel: "Live Module",
+          statusVariant: "ready",
+        },
+        {
           title: "User Management & RBAC",
           description: "Create, invite, promote, or deactivate user accounts across Student, Tutor, and Staff roles.",
           icon: "🛡️",
+          statusLabel: "Coming Soon",
+          statusVariant: "soon",
         },
         {
           title: "Platform Configuration",
           description: "Manage global platform settings, payment gateways, and notification integrations.",
           icon: "⚙️",
+          statusLabel: "Coming Soon",
+          statusVariant: "soon",
         },
         {
           title: "System Audit Logs",
           description: "Inspect API traffic, security events, and administrative audit trails in real time.",
           icon: "📈",
+          statusLabel: "Coming Soon",
+          statusVariant: "soon",
         },
       ]}
     />
