@@ -1,6 +1,7 @@
 import { AppError } from "../../../utils/app-error";
 import { ERROR_CODES } from "../../../utils/error-codes";
 import { HTTP_STATUS } from "../../../utils/http-status";
+import type { AdminCourseQueryInput } from "../dto/course.dto";
 import type { CourseResponseDTO } from "../dto/course.response.dto";
 import type { ICourseRepository } from "../repository/course.repository.interface";
 import type { ICourseService } from "./course.service.interface";
@@ -42,5 +43,16 @@ export class CourseService implements ICourseService {
       description: course.description,
       isActive: course.isActive,
     };
+  }
+
+  async getAllCourses(query?: AdminCourseQueryInput): Promise<CourseResponseDTO[]> {
+    const courses = await this.courseRepository.findAllCourses(query);
+
+    return courses.map((course) => ({
+      id: course.id,
+      title: course.title,
+      description: course.description,
+      isActive: course.isActive,
+    }));
   }
 }
