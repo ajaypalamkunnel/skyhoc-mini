@@ -21,5 +21,5 @@ export interface IAuthService {
 
   refresh(refreshToken: string): Promise<AuthTokens>;
 
-  logout(userId: number, refreshToken?: string): Promise<void>;
+  logout(refreshToken?: string): Promise<void>;
 }

@@ -257,7 +257,7 @@ export class AuthService implements IAuthService {
     };
   }
 
-  async logout(userId: number, refreshToken?: string): Promise<void> {
+  async logout(refreshToken?: string): Promise<void> {
     if (!refreshToken) {
       return;
     }
@@ -265,15 +265,15 @@ export class AuthService implements IAuthService {
     try {
       const payload = verifyRefreshToken(refreshToken);
 
-      if (payload && payload.sessionId) {
+      if (payload?.sessionId) {
         const session = await this.authRepository.findSessionById(payload.sessionId);
 
-        if (session && session.userId === userId && !session.revokedAt) {
+        if (session && !session.revokedAt) {
           await this.authRepository.revokeSession(session.id);
         }
       }
     } catch {
-      // If token expired or invalid, session cannot be refreshed anyway
+      // If token is invalid or expired, session cannot be refreshed anyway
     }
   }
 }
