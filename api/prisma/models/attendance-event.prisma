@@ -1,0 +1,21 @@
+enum AttendanceEventType {
+  JOIN
+  LEAVE
+}
+
+model AttendanceEvent {
+  id              Int                 @id @default(autoincrement())
+  liveClassId     Int                 @map("live_class_id")
+  userId          Int                 @map("user_id")
+  eventType       AttendanceEventType @map("event_type")
+  eventAt         DateTime            @map("event_at")
+  externalEventId String?             @unique @map("external_event_id")
+  createdAt       DateTime            @default(now()) @map("created_at")
+
+  liveClass LiveClass @relation(fields: [liveClassId], references: [id], onDelete: Cascade)
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, liveClassId])
+  @@index([liveClassId, eventAt])
+  @@map("attendance_events")
+}

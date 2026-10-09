@@ -156,7 +156,9 @@ export function CourseDetailsView({
             <LiveClassList
               liveClasses={displayedLiveClasses}
               statusFilter={liveClassFilter}
+              courseId={course.id}
             />
+
           )}
         </section>
       </main>

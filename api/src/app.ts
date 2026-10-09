@@ -7,6 +7,7 @@ import { errorMiddleware } from "./middleware/error.middleware";
 import authRoutes from "./modules/auth/routes/auth.routes";
 import courseRoutes from "./modules/courses/routes/course.routes";
 import liveClassRoutes from "./modules/live-classes/routes/live-class.routes";
+import attendanceRoutes from "./modules/attendance/routes/attendance.routes";
 import { requestLoggerMiddleware } from "./middleware/request-logger.middleware";
 
 const app = express();
@@ -34,6 +35,7 @@ app.get("/health", (_req, res) => {
 app.use("/api/auth", authRoutes);
 app.use("/api/courses", courseRoutes);
 app.use("/api/live-classes", liveClassRoutes);
+app.use("/api/attendance", attendanceRoutes);
 app.use(errorMiddleware);
 
 export default app;

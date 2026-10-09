@@ -5,18 +5,20 @@ enum LiveClassStatus {
 }
 
 model LiveClass {
-  id        Int             @id @default(autoincrement())
-  courseId  Int             @map("course_id")
-  tutorId   Int             @map("tutor_id")
-  title     String
-  startsAt  DateTime        @map("starts_at")
+  id              Int             @id @default(autoincrement())
+  courseId        Int             @map("course_id")
+  tutorId         Int             @map("tutor_id")
+  title           String
+  startsAt        DateTime        @map("starts_at")
   durationMinutes Int             @map("duration_minutes")
-  status    LiveClassStatus @default(SCHEDULED)
-  createdAt DateTime        @default(now()) @map("created_at")
-  updatedAt DateTime?       @map("updated_at")
+  status          LiveClassStatus @default(SCHEDULED)
+  createdAt       DateTime        @default(now()) @map("created_at")
+  updatedAt       DateTime?       @map("updated_at")
 
-  course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
-  tutor  User   @relation("TutorLiveClasses", fields: [tutorId], references: [id])
+  course           Course            @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  tutor            User              @relation("TutorLiveClasses", fields: [tutorId], references: [id])
+  attendanceEvents AttendanceEvent[]
+  attendanceRecords AttendanceRecord[]
 
   @@index([courseId])
   @@index([tutorId])

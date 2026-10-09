@@ -24,7 +24,7 @@ export function LoginForm() {
     const trimmedEmail = email.trim();
 
     if (!trimmedEmail) {
-      setLocalError("Email is required");
+      setLocalError("Email address is required");
       return;
     }
 
@@ -46,7 +46,7 @@ export function LoginForm() {
       });
 
       const targetRoute = getRoleHomeRoute(user?.role);
-      router.push(targetRoute);
+      router.replace(targetRoute);
     } catch {
       // Store already sets user-friendly error message in state
     }
@@ -55,75 +55,77 @@ export function LoginForm() {
   const errorMessage = localError || storeError;
 
   return (
-    <div className="w-full max-w-md mx-auto p-6 sm:p-8 bg-white dark:bg-neutral-900 rounded-2xl shadow-xl border border-neutral-200/80 dark:border-neutral-800">
-      <div className="mb-8 text-center">
-        <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-neutral-900 dark:text-white">
-          Welcome back
+    <div className="w-full max-w-md mx-auto bg-neutral-900/90 backdrop-blur-xl rounded-3xl p-6 sm:p-9 shadow-2xl shadow-black/80 border border-neutral-800/90 text-neutral-100">
+      <div className="mb-7 text-left">
+        <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white">
+          Sign In
         </h1>
-        <p className="mt-2 text-sm text-neutral-600 dark:text-neutral-400">
-          Sign in to access your dashboard and courses
+        <p className="mt-2 text-sm text-neutral-400">
+          Enter your credentials to access your student or staff portal
         </p>
       </div>
 
       {errorMessage && (
         <div
           role="alert"
-          className="mb-6 p-4 rounded-xl bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900 text-sm text-red-700 dark:text-red-400"
+          className="mb-6 p-3.5 rounded-2xl bg-red-950/40 border border-red-800/60 text-sm text-red-300 flex items-start gap-2.5 animate-in fade-in duration-200"
         >
-          <div className="flex items-center gap-2">
-            <svg
-              className="w-5 h-5 shrink-0"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-              />
-            </svg>
-            <span>{errorMessage}</span>
-          </div>
+          <svg
+            className="w-5 h-5 text-red-400 shrink-0 mt-0.5"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+            />
+          </svg>
+          <span className="leading-snug">{errorMessage}</span>
         </div>
       )}
 
-      <form onSubmit={handleSubmit} noValidate className="space-y-5">
+      <form onSubmit={handleSubmit} noValidate className="space-y-4 sm:space-y-5">
         <div>
           <label
             htmlFor="email"
-            className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1.5"
+            className="block text-xs font-semibold text-neutral-300 uppercase tracking-wider mb-2"
           >
-            Email address
+            Email Address
           </label>
-          <input
-            id="email"
-            name="email"
-            type="email"
-            autoComplete="email"
-            required
-            value={email}
-            onChange={(e) => {
-              setEmail(e.target.value);
-              if (errorMessage) {
-                setLocalError(null);
-                clearError();
-              }
-            }}
-            placeholder="you@example.com"
-            disabled={isLoading}
-            className="w-full px-4 py-2.5 rounded-xl border border-neutral-300 dark:border-neutral-700 bg-neutral-50/50 dark:bg-neutral-800/50 text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 focus:border-transparent transition-all disabled:opacity-50 disabled:cursor-not-allowed text-sm"
-          />
+          <div className="relative">
+            <input
+              id="email"
+              name="email"
+              type="email"
+              autoComplete="email"
+              required
+              value={email}
+              onChange={(e) => {
+                setEmail(e.target.value);
+                if (errorMessage) {
+                  setLocalError(null);
+                  clearError();
+                }
+              }}
+              placeholder="you@domain.com"
+              disabled={isLoading}
+              className="w-full px-4 py-3 rounded-xl border border-neutral-800 bg-neutral-950/70 text-white placeholder:text-neutral-500 text-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+            />
+          </div>
         </div>
 
         <div>
-          <label
-            htmlFor="password"
-            className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1.5"
-          >
-            Password
-          </label>
+          <div className="flex items-center justify-between mb-2">
+            <label
+              htmlFor="password"
+              className="block text-xs font-semibold text-neutral-300 uppercase tracking-wider"
+            >
+              Password
+            </label>
+          </div>
           <div className="relative">
             <input
               id="password"
@@ -141,14 +143,14 @@ export function LoginForm() {
               }}
               placeholder="••••••••"
               disabled={isLoading}
-              className="w-full pl-4 pr-11 py-2.5 rounded-xl border border-neutral-300 dark:border-neutral-700 bg-neutral-50/50 dark:bg-neutral-800/50 text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 focus:border-transparent transition-all disabled:opacity-50 disabled:cursor-not-allowed text-sm"
+              className="w-full pl-4 pr-11 py-3 rounded-xl border border-neutral-800 bg-neutral-950/70 text-white placeholder:text-neutral-500 text-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
             />
             <button
               type="button"
               aria-label={showPassword ? "Hide password" : "Show password"}
               onClick={() => setShowPassword(!showPassword)}
               tabIndex={-1}
-              className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-200 transition-colors cursor-pointer"
+              className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-neutral-400 hover:text-neutral-200 transition-colors cursor-pointer"
             >
               {showPassword ? (
                 <svg
@@ -192,7 +194,7 @@ export function LoginForm() {
         <button
           type="submit"
           disabled={isLoading}
-          className="w-full py-2.5 px-4 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-all disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2 text-sm cursor-pointer"
+          className="w-full mt-2 py-3 px-4 bg-indigo-600 hover:bg-indigo-500 active:scale-[0.99] text-white font-semibold rounded-xl shadow-lg shadow-indigo-600/25 focus:outline-none focus:ring-2 focus:ring-indigo-400 transition-all disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2 text-sm cursor-pointer"
         >
           {isLoading ? (
             <>
@@ -218,16 +220,16 @@ export function LoginForm() {
               <span>Signing in...</span>
             </>
           ) : (
-            <span>Sign in</span>
+            <span>Sign In to Dashboard</span>
           )}
         </button>
       </form>
 
-      <div className="mt-8 text-center text-sm text-neutral-600 dark:text-neutral-400">
+      <div className="mt-7 pt-6 border-t border-neutral-800/80 text-center text-sm text-neutral-400">
         Don&apos;t have an account?{" "}
         <Link
           href="/signup"
-          className="font-medium text-indigo-600 dark:text-indigo-400 hover:underline"
+          className="font-medium text-indigo-400 hover:text-indigo-300 hover:underline transition-colors"
         >
           Create account
         </Link>

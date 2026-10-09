@@ -1,12 +1,15 @@
+import Link from "next/link";
 import type { LiveClass } from "../live-classes.types";
 
 interface LiveClassCardProps {
   liveClass: LiveClass;
+  courseId?: number | string;
   fallbackCourseTitle?: string;
 }
 
 export function LiveClassCard({
   liveClass,
+  courseId,
   fallbackCourseTitle,
 }: LiveClassCardProps) {
   const startDate = new Date(liveClass.startsAt);
@@ -23,6 +26,7 @@ export function LiveClassCard({
 
   const isUpcoming = liveClass.status === "SCHEDULED";
   const courseTitle = liveClass.course?.title || fallbackCourseTitle;
+  const targetCourseId = liveClass.course?.id ?? liveClass.courseId ?? courseId;
 
   return (
     <div className="flex flex-col justify-between p-5 sm:p-6 rounded-2xl bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 shadow-sm hover:shadow-md hover:border-neutral-300 dark:hover:border-neutral-700 transition-all">
@@ -88,10 +92,10 @@ export function LiveClassCard({
       </div>
 
       <div className="pt-4 border-t border-neutral-100 dark:border-neutral-800/80 flex items-center justify-end">
-        {isUpcoming ? (
-          <button
-            type="button"
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-500 rounded-xl transition-all shadow-sm active:scale-95 cursor-pointer"
+        {targetCourseId ? (
+          <Link
+            href={`/dashboard/courses/${targetCourseId}/live-classes/${liveClass.id}/attendance`}
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 py-2 text-xs sm:text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-500 rounded-xl transition-all shadow-sm active:scale-95 cursor-pointer"
           >
             <svg
               className="w-4 h-4"
@@ -103,17 +107,18 @@ export function LiveClassCard({
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 strokeWidth={2}
-                d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"
+                d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"
               />
             </svg>
-            <span>Class Details</span>
-          </button>
+            <span>Attendance Simulation</span>
+          </Link>
         ) : (
           <span className="text-xs font-medium text-neutral-500 dark:text-neutral-400 italic">
-            Session finished
+            Class #{liveClass.id}
           </span>
         )}
       </div>
     </div>
   );
 }
+

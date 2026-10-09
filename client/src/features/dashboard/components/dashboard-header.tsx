@@ -25,7 +25,7 @@ export function DashboardHeader({
     try {
       setIsLoggingOut(true);
       await logout();
-      router.push("/login");
+      router.replace("/login");
       router.refresh();
     } catch {
       setIsLoggingOut(false);

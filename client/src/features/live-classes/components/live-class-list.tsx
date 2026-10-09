@@ -4,11 +4,13 @@ import { LiveClassCard } from "./live-class-card";
 interface LiveClassListProps {
   liveClasses: LiveClass[];
   statusFilter: "upcoming" | "completed";
+  courseId?: number | string;
 }
 
 export function LiveClassList({
   liveClasses,
   statusFilter,
+  courseId,
 }: LiveClassListProps) {
   if (liveClasses.length === 0) {
     return (
@@ -45,8 +47,13 @@ export function LiveClassList({
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       {liveClasses.map((liveClass) => (
-        <LiveClassCard key={liveClass.id} liveClass={liveClass} />
+        <LiveClassCard
+          key={liveClass.id}
+          liveClass={liveClass}
+          courseId={courseId}
+        />
       ))}
     </div>
   );
 }
+
