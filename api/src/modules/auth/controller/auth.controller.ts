@@ -85,17 +85,9 @@ export class AuthController {
   };
 
   logout = async (req: Request, res: Response): Promise<void> => {
-    if (!req.auth?.userId) {
-      throw new AppError(
-        "Authentication required",
-        HTTP_STATUS.UNAUTHORIZED,
-        ERROR_CODES.UNAUTHORIZED,
-      );
-    }
-
     const refreshToken = req.cookies?.refresh_token;
 
-    await this.authService.logout(req.auth.userId, refreshToken);
+    await this.authService.logout(refreshToken);
 
     clearAuthCookies(res);
 

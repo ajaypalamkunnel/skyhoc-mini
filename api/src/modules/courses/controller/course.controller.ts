@@ -4,7 +4,7 @@ import { HTTP_STATUS } from "../../../utils/http-status";
 import { ERROR_CODES } from "../../../utils/error-codes";
 import { AppError } from "../../../utils/app-error";
 import { sendSuccess } from "../../../utils/api-response";
-import { courseIdParamSchema } from "../dto/course.dto";
+import { adminCourseQuerySchema, courseIdParamSchema } from "../dto/course.dto";
 
 export class CourseController {
   constructor(private readonly courseService: ICourseService) {}
@@ -49,6 +49,18 @@ export class CourseController {
       HTTP_STATUS.OK,
       "Course retrieved successfully",
       course,
+    );
+  };
+
+  getAllCourses = async (req: Request, res: Response): Promise<void> => {
+    const query = adminCourseQuerySchema.parse(req.query);
+    const courses = await this.courseService.getAllCourses(query);
+
+    sendSuccess(
+      res,
+      HTTP_STATUS.OK,
+      "Courses retrieved successfully",
+      { courses },
     );
   };
 }

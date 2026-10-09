@@ -1,3 +1,4 @@
+import type { AdminCourseQueryInput } from "../dto/course.dto";
 import type { CourseResponseDTO } from "../dto/course.response.dto";
 
 export interface ICourseService {
@@ -7,4 +8,6 @@ export interface ICourseService {
     courseId: number,
     userId: number,
   ): Promise<CourseResponseDTO>;
+
+  getAllCourses(query?: AdminCourseQueryInput): Promise<CourseResponseDTO[]>;
 }
