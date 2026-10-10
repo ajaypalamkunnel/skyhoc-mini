@@ -29,9 +29,9 @@ app.use(requestLoggerMiddleware);
 
 app.get("/health", (_req, res) => {
   res.json({
-      success: true,
-      message: "Skyhoc API is running",
-    });
+    success: true,
+    message: "Skyhoch API is running",
+  });
 });
 app.use("/api/auth", authRoutes);
 app.use("/api/courses", courseRoutes);
