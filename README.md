@@ -209,7 +209,7 @@ skyhoch-mini/
     ├── package.json                 # Frontend dependencies & scripts
     ├── tsconfig.json                # TypeScript configuration
     ├── next.config.ts               # Next.js configuration
-    ├── .env.local                   # Local frontend environment variables
+    ├── .env.example                 # Template for frontend environment variables
     └── src/
         ├── middleware.ts            # Next.js Edge Middleware for session refresh rotation
         ├── config/                  # Client environment configuration
@@ -329,7 +329,14 @@ JWT_REFRESH_EXPIRES_IN=7d
 > - Secrets provided above are **DEVELOPMENT / DEMO ONLY**. In production environments, store high-entropy keys in a secure secret manager.
 
 ### Frontend Configuration (`client/.env.local`)
-The client uses `.env.local` to point to the Express API:
+Create `client/.env.local` from the provided `client/.env.example`:
+
+```bash
+# Run from: skyhoch-mini/client
+cp .env.example .env.local
+```
+
+Template contents:
 ```env
 NEXT_PUBLIC_API_URL=http://localhost:5000
 ```
@@ -445,6 +452,7 @@ The Express API starts on **`http://localhost:5000`**.
 ```bash
 # Run from: skyhoch-mini/client
 npm install
+cp .env.example .env.local
 
 # Build optimized production bundle and start Next.js (Recommended for fast UI evaluation)
 npm run build
@@ -482,9 +490,10 @@ npx prisma db seed
 npm run build
 npm start
 
-# Step 5: (In a new terminal) Install frontend dependencies, build & start Next.js
+# Step 5: (In a new terminal) Install frontend dependencies, configure env, build & start Next.js
 # Run from: skyhoch-mini/client
 npm install
+cp .env.example .env.local
 npm run build
 npm start
 
@@ -1050,9 +1059,10 @@ npm start
 
 ### Frontend Directory (`skyhoch-mini/client/`)
 ```bash
-# Install frontend dependencies
+# Install frontend dependencies & configure env
 # Run from: skyhoch-mini/client
 npm install
+cp .env.example .env.local
 
 # Start Next.js development server
 # Run from: skyhoch-mini/client
@@ -1106,7 +1116,7 @@ npm start
 
 - [x] **Repository Clones Cleanly**: Cloned and verified from source.
 - [x] **Docker PostgreSQL Starts**: Verified on port `5433` (DB: `skyhoc`, container: `skyhoc-postgres`).
-- [x] **Environment Variables Documented**: Clean template in `api/.env.example` and `client/.env.local`.
+- [x] **Environment Variables Documented**: Clean templates in `api/.env.example` and `client/.env.example`.
 - [x] **Prisma 7 Migrations Applied**: 10 migrations in `api/prisma/migrations/`.
 - [x] **Database Seeded**: Demo accounts for Student, Tutor, Department Head, Super Admin.
 - [x] **Backend Starts Cleanly**: Express running on port `5000` with `/health` check.
